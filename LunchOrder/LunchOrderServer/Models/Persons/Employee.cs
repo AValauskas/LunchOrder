@@ -2,27 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CodeMash.Models;
 using LunchOrderServer.Models.Divisions;
 using LunchOrderServer.Models.Orders;
 
 namespace LunchOrderServer.Models.Persons
 {
-    public class Employee
+    [CollectionName("Employees")]
+    public class Employee : Entity
     {
         public string Name { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Id_Employee { get; set; }
-        public Division Division { get; set; }
-      //  public int Role { get; set; }//  1 vadovas/ 2 administratorius/ 3 darbuotojas/ 4 praktikantas
+        //public string employee { get; set; }
+        public string Division { get; set; }
 
         public Employee(string name, Division division)
         {
             this.Name = name;
          //   this.Username = username;
        //     this.Password = password;
-            this.Division = division;
+         //   this.Division = division;
         }
+
+        public Employee()
+        {
+            
+        }
+
 
 
     }

@@ -9,6 +9,8 @@ namespace LunchOrderServerTesting
 {
     public class TestCases : IDisposable
     {
+
+        public static string MyDivisionID = "5e144e04e39c590001d31fcd";
         //DivisionsData
         public static readonly Division DivisionLTU = new Division(new Country("Lithuania", "LTU"));
         public static readonly Division DivisionNL = new Division(new Country("Lithuania", "NL"));
@@ -28,6 +30,8 @@ namespace LunchOrderServerTesting
             //mployeeList.Add(EmployeeFromLT1);
             Menu menu = new Menu(Friday, employeeList, DivisionLTU);
             menu.LunchTime = Friday;
+          //  menu.division = "5e0db73559c49d0001b6160f";
+            menu.Id = "5e0df4d259c49d0001c76255";
             return menu;
         }
 
@@ -37,6 +41,9 @@ namespace LunchOrderServerTesting
             var employeeList = new List<Employee> { EmployeeFromLT1, EmployeeFromLT2, EmployeeFromLT3Guest };
             //mployeeList.Add(EmployeeFromLT1);
             Menu menu = new Menu(Friday, employeeList, DivisionLTU);
+         //   menu.division = "5e0db73559c49d0001b6160f";
+            menu.Id = "5e0df4d259c49d0001c76255";
+        //    menu.supplier = "5e0db7ee59c49d0001b61652";
             menu.LunchTime = Friday;
             menu.Suplier = GetExpressSupplier();
             menu.FoodList = expressList;
@@ -66,7 +73,6 @@ namespace LunchOrderServerTesting
            
             PersonalOrder personal = new PersonalOrder(EmployeeFromLT1, employee1List);
             PersonalOrder personal2 = new PersonalOrder(EmployeeFromLT2, employee2List);
-            personal2.Id_PersonalOrder = 1;
             order.EmployersOrders.Add(personal);
             order.EmployersOrders.Add(personal2);
             return order;
@@ -120,24 +126,26 @@ namespace LunchOrderServerTesting
             new Food("garlic", 9.5,FoodEnum.foodTypes.Souce) };
 
         public static readonly List<Guest> guestList = new List<Guest>() {
-            new Guest("Antanas", "0"),
-            new Guest("Jonas", "1"),
-            new Guest("Jurgis", "2"),
-            new Guest("Petras", "3"), };
+            new Guest("Antanas"),
+            new Guest("Jonas"),
+            new Guest("Jurgis"),
+            new Guest("Petras"), };
         public static readonly List<Guest> guestList2 = new List<Guest>() {
-            new Guest("Marius", "6"),
-            new Guest("Darius", "7"),
-            new Guest("Petras", "3"), };
+            new Guest("Marius"),
+            new Guest("Darius"),
+            new Guest("Petras"), };
         public static readonly List<Guest> guestList3 = new List<Guest>() {
-            new Guest("Marius", "0"),
-            new Guest("Jonas", "4"),
-            new Guest("Jurgis", "5"),};
+            new Guest("Marius"),
+            new Guest("Jonas"),
+            new Guest("Jurgis"),};
 
         public static Supplier GetArrenaSupplier() { Supplier ArennaSupplier = new Supplier("Arenna", ArenaList);return ArennaSupplier;
     }
         public static Supplier GetExpressSupplier()
         {
-            Supplier ExpressSupplier = new Supplier("Express", expressList); return ExpressSupplier;
+            Supplier ExpressSupplier = new Supplier("Express", expressList);
+            ExpressSupplier.Id = "5e0db7ee59c49d0001b61652";
+            return ExpressSupplier;
         }
 
 

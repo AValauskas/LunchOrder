@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CodeMash.Core" Version="2.0.128" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="mongocsharpdriver" Version="2.10.0" />
     <PackageReference Include="NSubstitute" Version="4.2.1" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.assert" Version="2.4.1" />

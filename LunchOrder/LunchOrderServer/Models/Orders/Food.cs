@@ -1,4 +1,5 @@
-﻿using LunchOrderServer.Models.Persons;
+﻿using CodeMash.Models;
+using LunchOrderServer.Models.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,13 @@ using static LunchOrderServer.Models.Orders.FoodEnum;
 
 namespace LunchOrderServer.Models.Orders
 {
-    public class Food
+    [CollectionName("Foods")]
+    public class Food : Entity
     {
         public string Name { get; set; }
         public double Cost { get; set; }
         public foodTypes Foodtype;
         public int Count { get; set; }
-        public int Id_Food { get; set; }
 
         public Food(string name, double cost, foodTypes foodtype)
         {
@@ -27,6 +28,9 @@ namespace LunchOrderServer.Models.Orders
             this.Cost = cost;
             this.Foodtype = foodtype;
             this.Count = count;
+        }
+        public Food()
+        {
         }
     }
 }

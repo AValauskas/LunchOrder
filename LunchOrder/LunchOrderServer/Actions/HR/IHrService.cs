@@ -9,9 +9,9 @@ namespace LunchOrderServer.Actions.HR
 {
    public interface IHrService
     {
-      
-     //   public void WritingToDatabase
-        public List<Employee> IsWorkingAtLunchDay(Division division, DateTime lunchdate);
-        public List<Employee> GetAllEmployeesListWhoAreAnotherDivision();
+        public LunchServiceSettings connections { get; set; }
+        //   public void WritingToDatabase
+        public List<Employee> IsWorkingAtLunchDay(string divisionId, DateTime lunchdate);
+        //public List<Employee> GetAllEmployeesListWhoAreAnotherDivision();
     }
 }

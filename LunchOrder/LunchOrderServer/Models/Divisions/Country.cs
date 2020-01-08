@@ -1,11 +1,13 @@
-﻿using System;
+﻿using CodeMash.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunchOrderServer.Models.Divisions
 {
-    public class Country
+    [CollectionName("Countryes")]
+    public class Country : Entity
     {
         private string name { get; set; }
         private string code { get; set; }

@@ -45,6 +45,14 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "CodeMash.Core": {
+              "target": "Package",
+              "version": "[2.0.130, )"
+            },
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[16.2.0, )"
@@ -56,6 +64,10 @@
             "coverlet.collector": {
               "target": "Package",
               "version": "[1.0.1, )"
+            },
+            "mongocsharpdriver": {
+              "target": "Package",
+              "version": "[2.10.0, )"
             },
             "xunit": {
               "target": "Package",
@@ -128,6 +140,12 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
+          "dependencies": {
+            "CodeMash.Core": {
+              "target": "Package",
+              "version": "[2.0.130, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

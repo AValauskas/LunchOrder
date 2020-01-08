@@ -19,13 +19,30 @@ namespace LunchOrderServer.Actions.NotifyWorkers
                                 
         public void SendNotification(string templateId, List<string> receivers)
         {
-            string message = GetTemplate(templateId);
+            object message = GetTemplate(templateId);
 
-            //
-            //Send message to all receivers
-            //
+            //TWILIO
+          /*  string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+            string authToken = Environment.GetEnvironmentVariable("Twilio_AUTH_TOKEN");
+            TwilioClient.Init(accountSid, authToken);
 
-            throw new NotImplementedException();
+            var to = new PhoneNumber("+37060984078");
+            var from = new PhoneNumber("+12679302689");
+
+            var message = MessageResource.Create(
+                to: to,
+                from: from,
+                body: "nice"
+                );*/
+
+
+            foreach (var receiver in receivers)
+            {
+                //
+                //Send message to all receivers message with input receiver
+                //
+            }
+
         }
     }
 }

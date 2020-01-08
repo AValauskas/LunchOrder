@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CodeMash.Models;
 using LunchOrderServer.Models.Divisions;
 using LunchOrderServer.Models.Persons;
 
 namespace LunchOrderServer.Models.Orders
 {
-    public class Order
+    [CollectionName("Orders")]
+    public class Order : Entity
     {
       //  public Supplier Supplier { get; set; }
         public List<Food> FoodList { get; set; }
@@ -22,7 +24,6 @@ namespace LunchOrderServer.Models.Orders
         public bool IsOpen { get; set; }
       
         public double TotalPrice { get; set; }
-        public int Id_Order { get; set; }
 
 
         public Order(Menu menu)

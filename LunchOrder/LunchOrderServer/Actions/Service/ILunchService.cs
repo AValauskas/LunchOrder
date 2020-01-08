@@ -17,11 +17,11 @@ namespace LunchOrderServer.Actions.Service
 
         IHrService HRService { get; set; }
 
-
+        public LunchServiceSettings connections { get; set; }
 
         //-------------------Menu--------------------
         //automatically each monday (add only theese employees who is not in holiday)---// use HrService
-        public Menu CreateNewMenu(Division division); //
+        public void CreateNewMenu(string divisionID); //
 
         //Change Menu time and renew employee list who are working in day which are set --/ 
         //If no exception were throwned, it means, that function passed succesfully, 
@@ -31,7 +31,7 @@ namespace LunchOrderServer.Actions.Service
         public void AddSupplierToMenu(Menu menu, Supplier supplier);
 
 
-        public void AddFoodToMenu(Menu menu, List<Food> food);
+        public void AddFoodToMenu(Menu menu, List<string> food);
 
         public void AddEmployee(Menu menu, List<Employee> employees);
         public void RemoveEmployee(Menu menu, List<Employee> employees);
@@ -91,6 +91,8 @@ namespace LunchOrderServer.Actions.Service
 
         public bool IsTodayWeekend();
 
+        public bool DoMenuExist(string divisionId);
+     
         public List<string> EmployeesWhoMadeAnOrder();
 
      //   public bool IsMenuCreated(DateTime lunchTime);
