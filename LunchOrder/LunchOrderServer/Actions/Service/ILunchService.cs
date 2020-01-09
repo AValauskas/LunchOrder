@@ -37,7 +37,7 @@ namespace LunchOrderServer.Actions.Service
         public void RemoveEmployee(Menu menu, List<Employee> employees);
 
         //Will call HrService, to get list of employees who are working in another division
-        public void AddGuestToMenu(Menu menu, List<Guest> guests);
+        public void AddGuestToMenu(Menu menu, List<string> guests);
 
 
         //arba public void RemoveGuest(Menu menu, List<string> employees);
@@ -48,7 +48,7 @@ namespace LunchOrderServer.Actions.Service
         //--------------Orders---------------------------------
 
         //then Menu is finished and it's a day before lunch day, this method convert menu to order
-        public Order CreateOrder(Menu menu);
+        public void CreateOrder(Menu menu);
 
 
         //Person make his own chart of foood he want, and then add this to general Order
@@ -92,7 +92,9 @@ namespace LunchOrderServer.Actions.Service
         public bool IsTodayWeekend();
 
         public bool DoMenuExist(string divisionId);
-     
+        public bool LunchTimeIsThisWeek(DateTime lunchDate);
+
+
         public List<string> EmployeesWhoMadeAnOrder();
 
      //   public bool IsMenuCreated(DateTime lunchTime);

@@ -73,17 +73,17 @@ namespace LunchOrderServerTesting
            
             PersonalOrder personal = new PersonalOrder(EmployeeFromLT1, employee1List);
             PersonalOrder personal2 = new PersonalOrder(EmployeeFromLT2, employee2List);
-            order.EmployersOrders.Add(personal);
-            order.EmployersOrders.Add(personal2);
+         //   order.EmployersOrders.Add(personal);
+          // order.EmployersOrders.Add(personal2);
             return order;
         }
         public static List<string> Receivers()
         {
             List<string> Receivers = new List<string>();
 
-            foreach (var personalOrder in OrderWithPersonalOrders().EmployersOrders)
+            foreach (var personalOrder in OrderWithPersonalOrders().EmployeersOrders)
             {
-                Receivers.Add(personalOrder.Employee.Name);
+               // Receivers.Add(personalOrder.Employee.Name);
             }
             return Receivers;
         }

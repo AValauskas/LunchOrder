@@ -22,25 +22,26 @@ namespace LunchOrderServer.Actions.Service
 
         //---------------Menu----------------
 
-        public  async void CreateNewMenu(string divisionId)
+        public async void CreateNewMenu(string divisionId)
         {
-            if (DoMenuExist(divisionId))
-            {
-                throw new BussinessException("Menu already exist");
-            }
-            else if(IsTodayMonday())
+            //if (DoMenuExist(divisionId))
+            //{
+            //    throw new BussinessException("Menu already exist");
+            //}
+            //else
+            if (IsTodayMonday())
             {
                 DateTime closestFriday = DateTime.Now.StartOfWeek(DayOfWeek.Friday);
                 List<Employee> employees = HRService.IsWorkingAtLunchDay(divisionId, closestFriday);
                 List<string> employeesId = new List<string>();
                 employees.ForEach(x => employeesId.Add(x.Id));
-               // closestFriday = closestFriday.AddHours(2);
-                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
-                TimeSpan duration = closestFriday.Subtract(epoch);
-                var diff = duration.TotalMilliseconds;
+                closestFriday = closestFriday.AddHours(2);
+               // DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+            //    TimeSpan duration = closestFriday.Subtract(epoch);
+               // var diff = duration.TotalMilliseconds;
 
                
-                var menu = new Menu(Convert.ToSingle(diff), employeesId, divisionId);
+                var menu = new Menu(closestFriday, employeesId, divisionId);
                 
                 var projectId = Guid.Parse(connections.ProjectId);
                 var apiKey = connections.ApiKey;
@@ -65,12 +66,14 @@ namespace LunchOrderServer.Actions.Service
             {
                 throw new BussinessException("Today you are not able to set a lunch day");
             }
+            if (!LunchTimeIsThisWeek(lunchtime))
+            {
+                throw new BussinessException("Lunch Time is from another week");
+            }
             if (TimeHasPassed(lunchtime))
             {
-                throw new BussinessException("Menu not created yet");
-            }
-
-            //checker if choosen lunchtime is from this week is needed
+                throw new BussinessException("this lunch time already passed");
+            }           
             else
             {
                 var projectId = Guid.Parse(connections.ProjectId);
@@ -83,9 +86,7 @@ namespace LunchOrderServer.Actions.Service
                 TimeSpan duration = lunchtime.Subtract(epoch);
                 var diff = duration.TotalMilliseconds;
 
-
-                menu.LunchTimeDate = Convert.ToSingle(diff);
-              //  menu.lunchtime = menu.lunchtime.AddHours(2);
+                menu.LunchTimeDate = lunchtime;
                 List<Employee> employees = HRService.IsWorkingAtLunchDay(menu.DivisionThisMenuBelong, lunchtime);
               
                 List<string> employeesId = new List<string>();
@@ -101,21 +102,28 @@ namespace LunchOrderServer.Actions.Service
         
 
         public void AddSupplierToMenu(Menu menu, Supplier supplier )
-        {
-            if (!DoMenuExist(menu.DivisionThisMenuBelong))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
+        {           
             if (supplier == null)
             {
                 throw new BussinessException("Supplier is null");
             }
-            menu.ThismenuSupplier = supplier.Id;
+
+            //DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+           // DateTime date = epoch.AddMilliseconds(menu.LunchTimeDate);
+            if (!LunchTimeIsThisWeek(menu.LunchTimeDate))
+            {
+                throw new BussinessException("Menu is from another week");
+            }
 
             var projectId = Guid.Parse(connections.ProjectId);
             var apiKey = connections.ApiKey;
             var client = new CodeMashClient(apiKey, projectId);
             var service = new CodeMashRepository<Menu>(client);
+
+
+            menu.ThismenuSupplier = supplier.Id;
+
+           
 
             service.ReplaceOne(
                 x => x.Id == menu.Id, menu,
@@ -128,14 +136,19 @@ namespace LunchOrderServer.Actions.Service
 
         public void AddFoodToMenu(Menu menu, List<string> food)
         {                     
-            //if (TimeHasPassed(menu.lunchtime))
-            //{
-            //    throw new BussinessException("This is previous week menu");
-            //}
+
             if (menu.ThismenuSupplier == null)
             {
                 throw new BussinessException("supplier not yet identified");
             }
+
+           // DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+           // DateTime date = epoch.AddMilliseconds(menu.LunchTimeDate);
+            if (!LunchTimeIsThisWeek(menu.LunchTimeDate))
+            {
+                throw new BussinessException("Menu is from another week");
+            }
+
             var projectId = Guid.Parse(connections.ProjectId);
             var apiKey = connections.ApiKey;
             var client = new CodeMashClient(apiKey, projectId);
@@ -155,23 +168,21 @@ namespace LunchOrderServer.Actions.Service
                 new DatabaseReplaceOneOptions()
             );
         }
-        public void AddGuestToMenu(Menu menu, List<Guest> guests)
+        public void AddGuestToMenu(Menu menu, List<string> guests)
         {
-            //if (TimeHasPassed(menu.LunchTime))
-            //{
-            //    throw new BussinessException("This is previous week menu");
-            //}
             if (guests.Count== 0)
             {
                 throw new BussinessException("no guests were chosen");
             }
+          //  DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+          //  DateTime date = epoch.AddMilliseconds(menu.LunchTimeDate);
+            if (LunchTimeIsThisWeek(menu.LunchTimeDate))
+            {
+                throw new BussinessException("Menu is from another week");
+            }
 
-            //if (TimeHasPassed(menu.LunchTime))
-            //{
-            //    throw new BussinessException("This is previous week menu");
-            //}
             //guests.RemoveAll(x => menu.Guests.Any(y => y.Id == x.Id));
-            
+
             //menu.Guests = menu.Guests
             //.Concat(guests)
             //.ToList();
@@ -240,12 +251,8 @@ namespace LunchOrderServer.Actions.Service
         //------------------------------------------------------
         //-----------------------Order---------------------------
 
-        public Order CreateOrder(Menu menu)//Maybe we can get division from menu, becouse menu has division attribute.
+        public async void CreateOrder(Menu menu)
         {
-            //if (TimeHasPassed(menu.LunchTime))
-            //{
-            //    throw new BussinessException("This is previous week menu, set new menu");
-            //}
             if (menu.ThismenuSupplier==null)
             {
                 throw new BussinessException("supplier not yet identified");
@@ -260,12 +267,13 @@ namespace LunchOrderServer.Actions.Service
             }
 
             Order order = new Order(menu);
-           // menu.Division.Orders.Add()
-          //  menu.Division.Orders.Add(order);
-            //
-            //Create order in database
-            //
-            return order;
+
+            var projectId = Guid.Parse(connections.ProjectId);
+            var apiKey = connections.ApiKey;
+            var client = new CodeMashClient(apiKey, projectId);
+            var service = new CodeMashRepository<Order>(client);
+            await service.InsertOneAsync(order, new DatabaseInsertOneOptions());
+
         }
 
 
@@ -280,7 +288,7 @@ namespace LunchOrderServer.Actions.Service
                 throw new BussinessException("Your food list is empty");
             }
             PersonalOrder personalOrder = new PersonalOrder(employee, foodlist);
-            order.EmployersOrders.Add(personalOrder);
+      //      order.EmployersOrders.Add(personalOrder);
 
 
             //
@@ -302,12 +310,12 @@ namespace LunchOrderServer.Actions.Service
             }
 
 
-            var index = order.EmployersOrders.FindIndex(Eo => Eo.Employee.Name == employee.Name);//Change name to id
-            if ( index== -1 )
-            {
-                throw new BussinessException("You dont't have any order yet");
-            }
-               order.EmployersOrders[index].FoodList = foodlist;
+            //var index = order.EmployersOrders.FindIndex(Eo => Eo.Employee.Name == employee.Name);//Change name to id
+            //if ( index== -1 )
+            //{
+            //    throw new BussinessException("You dont't have any order yet");
+            //}
+              // order.EmployersOrders[index].FoodList = foodlist;
 
             //
             //Update PersonalOrder in database
@@ -320,13 +328,13 @@ namespace LunchOrderServer.Actions.Service
                 throw new BussinessException("Order is closed");
             }
 
-            var index = order.EmployersOrders.FindIndex(Eo => Eo.Employee.Name == employee.Name);//Change name to id
+         //   var index = order.EmployersOrders.FindIndex(Eo => Eo.Employee.Name == employee.Name);//Change name to id
 
-            if (index == -1)
-            {
-                throw new BussinessException("You dont't have any order yet");
-            }
-            order.EmployersOrders.RemoveAt(index);
+            //if (index == -1)
+            //{
+            //    throw new BussinessException("You dont't have any order yet");
+            //}
+            //order.EmployersOrders.RemoveAt(index);
 
             //
             //Delete PersonalOrder from database
@@ -334,7 +342,7 @@ namespace LunchOrderServer.Actions.Service
         }
         public void CloseOrder(Order order)
         {
-            if (order.EmployersOrders.Count == 0)
+            if (order.EmployeersOrders.Count == 0)
             {
                 throw new BussinessException("Order is empty");
             }
@@ -351,27 +359,27 @@ namespace LunchOrderServer.Actions.Service
 
         public void CheckIfNotificationIsNecesary(Order order)
         {
-            var isLunchTummorochecker = IsLunchTummorow(order.LunchDay);
-            if (!isLunchTummorochecker)
-            {
-                throw new BussinessException("It's too early to send message");
-            }
+           // var isLunchTummorochecker = IsLunchTummorow(order.LunchDay);
+            //if (!isLunchTummorochecker)
+            //{
+            //    throw new BussinessException("It's too early to send message");
+            //}
 
-            var isTimePassed = TimeHasPassed(order.LunchDay);
-            if (isTimePassed)
-            {
-                throw new BussinessException("Order time has passed");
-            }
-            List<string> Receivers = new List<string>();
-            foreach (var employee in order.Employees)
-            {
-                var isPersonalOrderCompleted = IsEmployeeOrderCompleted(order, employee);
-                if ( !isPersonalOrderCompleted)
-                {
-                    Receivers.Add(employee.Name);//name change to id
-                }
-            }
-            NotificationSender.SendNotification("1",Receivers);
+            //var isTimePassed = TimeHasPassed(order.LunchDay);
+            //if (isTimePassed)
+            //{
+            //    throw new BussinessException("Order time has passed");
+            //}
+            //List<string> Receivers = new List<string>();
+            //foreach (var employee in order.Employees)
+            //{
+            //    var isPersonalOrderCompleted = IsEmployeeOrderCompleted(order, employee);
+            //    if ( !isPersonalOrderCompleted)
+            //    {
+            //        Receivers.Add(employee.Name);//name change to id
+            //    }
+            //}
+            //NotificationSender.SendNotification("1",Receivers);
 
             //1 is message which will be sent if the order is not yet completed
         }
@@ -379,9 +387,9 @@ namespace LunchOrderServer.Actions.Service
         {
             List<string> Receivers = new List<string>();
             
-            foreach (var personalOrder in order.EmployersOrders)
+            foreach (var personalOrder in order.EmployeersOrders)
             {
-                Receivers.Add(personalOrder.Employee.Name);
+              //  Receivers.Add(personalOrder.Employee.Name);
             }
             //or
             // List<string> Receivers = GetReceiverList()<------//helper method 
@@ -417,11 +425,11 @@ namespace LunchOrderServer.Actions.Service
                
         public virtual bool IsEmployeeOrderCompleted(Order order, Employee employee)
         {
-            var personalorder = order.EmployersOrders.Select(personalOrder => personalOrder.Employee.Id == employee.Id).First();
-            if (personalorder != null)
-            {
-                return true;
-            }
+            //var personalorder = order.EmployersOrders.Select(personalOrder => personalOrder.Employee.Id == employee.Id).First();
+            //if (personalorder != null)
+            //{
+            //    return true;
+            //}
             return false;
         }
 
@@ -451,16 +459,26 @@ namespace LunchOrderServer.Actions.Service
             //Exceptiono is needed
             var LastMenu = menuByDivision[menuByDivision.Count-1];
 
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
-            DateTime date = epoch.AddMilliseconds(LastMenu.LunchTimeDate);
+            //DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+          //  DateTime date = epoch.AddMilliseconds(LastMenu.LunchTimeDate);
 
-            if (date > DateTime.Now)
+            if (LastMenu.LunchTimeDate > DateTime.Now)
             {
                 return true;
             }
             return false;
         }
-       
+        
+        public bool LunchTimeIsThisWeek(DateTime lunchDate)
+        {
+
+            var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+            var d1 = lunchDate.Date.AddDays(-1 * (int)cal.GetDayOfWeek(lunchDate));
+            var d2 = DateTime.Now.Date.AddDays(-1 * (int)cal.GetDayOfWeek(DateTime.Now));
+
+            return d1 == d2;
+
+        }
 
         public virtual bool IsTodayWeekend()
         {

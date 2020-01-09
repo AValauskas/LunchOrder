@@ -10,7 +10,8 @@ namespace LunchOrderServer.Models.Persons
     public class Guest : Entity
     {
         public string Name { get; set; }
-
+        public string Phone { get; set; }
+        public string Email { get; set; }
         public Guest(string name)
         {
             this.Name = name;

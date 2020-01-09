@@ -150,7 +150,68 @@ namespace LunchOrderServerTesting
         }
 
 
+        [Fact]
+        public void Convert_To_Order_Success()
+        {
+            ILunchService lunchService = Substitute.For<LunchService>();
+            lunchService.IsTodayMonday().Returns(true);
 
+            IHrService hrService = new HrService();
+            hrService.connections = settings;
+
+            lunchService.HRService = hrService;
+            lunchService.connections = settings;
+
+
+            var projectId = Guid.Parse(settings.ProjectId);
+            var apiKey = settings.ApiKey;
+            var client = new CodeMashClient(apiKey, projectId);
+            var serviceMenu = new CodeMashRepository<Menu>(client);
+
+            var lastMenu = serviceMenu.Find().Result.Last();
+            lunchService.CreateOrder(lastMenu);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         [Fact]
         public async void Test_Menu_Find()
         {
@@ -188,18 +249,7 @@ namespace LunchOrderServerTesting
             var pp = serviceMenu.Find(x => x.Name == "John");
 
             serviceMenu.InsertOne(person);
-        }
-
-
-
-
-
-
-
-
-
-
-
+        }*/
 
     }
 }

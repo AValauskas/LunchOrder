@@ -15,8 +15,8 @@ namespace LunchOrderServer.Models.Orders
         [JsonProperty(PropertyName = "Supplier")]
         public string ThismenuSupplier { get; set; }
 
-        [JsonProperty(PropertyName = "Lunchtime2")]
-        public float LunchTimeDate { get; set; }
+      //  [JsonProperty(PropertyName = "lunchtime2")]
+        public DateTime LunchTimeDate { get; set; }
 
 
 
@@ -37,7 +37,7 @@ namespace LunchOrderServer.Models.Orders
         {
             
         }
-        public Menu(float lunchTime, List<string> employees, string division)
+        public Menu(DateTime lunchTime, List<string> employees, string division)
         {
             this.ThismenuSupplier = null;
             this.LunchTimeDate = lunchTime;
@@ -47,7 +47,7 @@ namespace LunchOrderServer.Models.Orders
             this.MenuGuests = new List<string>();
 
         }
-        public Menu(float lunchTime,  string division)
+        public Menu(DateTime lunchTime,  string division)
         {
             this.ThismenuSupplier = null;
             this.LunchTimeDate = lunchTime;
@@ -56,7 +56,7 @@ namespace LunchOrderServer.Models.Orders
             this.EmployeesInMenu = new List<string>();
             this.MenuGuests = new List<string>();
 
-        }
+        }/*
         public Menu(DateTime lunchTime, List<string> employees, string division)
         {
             this.ThismenuSupplier = null;
@@ -66,7 +66,7 @@ namespace LunchOrderServer.Models.Orders
             this.EmployeesInMenu = employees;
             this.MenuGuests = new List<string>();
 
-        }
+        }*/
 
 
     }
