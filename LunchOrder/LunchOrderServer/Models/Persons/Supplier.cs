@@ -12,12 +12,10 @@ namespace LunchOrderServer.Models.Persons
     public class Supplier : Entity
     {
         public string Name { get; set; }
-        [JsonProperty(PropertyName = "FoodList")]
-        public List<Food> Foodlist {get; set;}
 
-        public List<string> foodlist { get; set; }
+        public List<string> Foodlist { get; set; }
 
-        public Supplier(string name, List<Food> foodList)
+        public Supplier(string name, List<string> foodList)
         {
             this.Name = name;
             this.Foodlist = foodList;

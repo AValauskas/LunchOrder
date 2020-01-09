@@ -24,7 +24,7 @@
     ".NETCoreApp,Version=v3.0": {
       "LunchOrderServer/1.0.0": {
         "dependencies": {
-          "CodeMash.Core": "2.0.128",
+          "CodeMash.Core": "2.0.131",
           "Microsoft.AspNetCore.Antiforgery": "3.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.0.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "3.0.0.0",
@@ -315,7 +315,7 @@
           "LunchOrderServer.dll": {}
         }
       },
-      "CodeMash.Core/2.0.128": {
+      "CodeMash.Core/2.0.131": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "2.2.0",
           "Microsoft.Extensions.Configuration.Abstractions": "2.2.0",
@@ -3486,12 +3486,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CodeMash.Core/2.0.128": {
+    "CodeMash.Core/2.0.131": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iW/115hBsREHG7FPHsNeBMVBPbxZ7X3m2MQotSfxUU0MB+OKJUngdOVrhSJd/yDpiuW4WIMQR8uXprqLqJt+wQ==",
-      "path": "codemash.core/2.0.128",
-      "hashPath": "codemash.core.2.0.128.nupkg.sha512"
+      "sha512": "sha512-LYwL+cpYjJ2WpF5cQDprUt6wAUr27xACngVBMiU2YslbxitGhz4SJCTURZxLiGZSRPPHc/dFCWM24HeVaqQP4w==",
+      "path": "codemash.core/2.0.131",
+      "hashPath": "codemash.core.2.0.131.nupkg.sha512"
     },
     "DnsClient/1.2.0": {
       "type": "package",

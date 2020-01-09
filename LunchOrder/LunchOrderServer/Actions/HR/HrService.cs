@@ -22,13 +22,14 @@ namespace LunchOrderServer.Actions.HR
             var client = new CodeMashClient(apiKey, projectId);
             var service = new CodeMashRepository<Employee>(client);
 
-            var filter = Builders<Employee>.Filter.Eq(x => x.Division, divisionId);
-            var result = service.Find(filter);
+         //   var filter = Builders<Employee>.Filter.Eq(x => x.Division, divisionId);
+         //   var result = service.Find(filter).Result.ToList();
 
-            var persons = service.Find(x => x.Division == divisionId,
-                 new DatabaseFindOptions());
+        //   var persons = service.Find(x => x.Division == divisionId,
+             //    new DatabaseFindOptions());
 
-            var workingEmployeeList = service.Find().Result.ToList();
+            var persons = service.Find().Result.ToList();
+            var workingEmployeeList = persons.FindAll(x => x.Division == divisionId).ToList();
 
             return workingEmployeeList;
         }

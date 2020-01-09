@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.0": {
       "LunchOrderServerTesting/1.0.0": {
         "dependencies": {
-          "CodeMash.Core": "2.0.128",
+          "CodeMash.Core": "2.0.131",
           "LunchOrderServer": "1.0.0",
           "Microsoft.Extensions.Configuration.UserSecrets": "3.1.0",
           "Microsoft.NET.Test.Sdk": "16.2.0",
@@ -43,7 +43,7 @@
           }
         }
       },
-      "CodeMash.Core/2.0.128": {
+      "CodeMash.Core/2.0.131": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "3.1.0",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.0",
@@ -2052,7 +2052,7 @@
       },
       "LunchOrderServer/1.0.0": {
         "dependencies": {
-          "CodeMash.Core": "2.0.128"
+          "CodeMash.Core": "2.0.131"
         },
         "runtime": {
           "LunchOrderServer.dll": {}
@@ -2073,12 +2073,12 @@
       "path": "castle.core/4.4.0",
       "hashPath": "castle.core.4.4.0.nupkg.sha512"
     },
-    "CodeMash.Core/2.0.128": {
+    "CodeMash.Core/2.0.131": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iW/115hBsREHG7FPHsNeBMVBPbxZ7X3m2MQotSfxUU0MB+OKJUngdOVrhSJd/yDpiuW4WIMQR8uXprqLqJt+wQ==",
-      "path": "codemash.core/2.0.128",
-      "hashPath": "codemash.core.2.0.128.nupkg.sha512"
+      "sha512": "sha512-LYwL+cpYjJ2WpF5cQDprUt6wAUr27xACngVBMiU2YslbxitGhz4SJCTURZxLiGZSRPPHc/dFCWM24HeVaqQP4w==",
+      "path": "codemash.core/2.0.131",
+      "hashPath": "codemash.core.2.0.131.nupkg.sha512"
     },
     "coverlet.collector/1.0.1": {
       "type": "package",

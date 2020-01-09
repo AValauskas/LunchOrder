@@ -13,6 +13,9 @@ namespace LunchOrderServer.Models.Persons
     public class Person : Entity
     {
         public string Name { get; set; }
-        public string OneMoreToCheck { get; set; }
+
+        [JsonProperty(PropertyName = "Foodlist")]
+        // public List<Food> FoodList { get; set; }
+        public List<string> foodlist { get; set; }
     }
 }

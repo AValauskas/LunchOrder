@@ -34,8 +34,13 @@ namespace LunchOrderServer.Actions.Service
                 List<Employee> employees = HRService.IsWorkingAtLunchDay(divisionId, closestFriday);
                 List<string> employeesId = new List<string>();
                 employees.ForEach(x => employeesId.Add(x.Id));
-                closestFriday = closestFriday.AddHours(2);
-                var menu = new Menu(closestFriday, employeesId, divisionId);
+               // closestFriday = closestFriday.AddHours(2);
+                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+                TimeSpan duration = closestFriday.Subtract(epoch);
+                var diff = duration.TotalMilliseconds;
+
+               
+                var menu = new Menu(Convert.ToSingle(diff), employeesId, divisionId);
                 
                 var projectId = Guid.Parse(connections.ProjectId);
                 var apiKey = connections.ApiKey;
@@ -63,7 +68,9 @@ namespace LunchOrderServer.Actions.Service
             if (TimeHasPassed(lunchtime))
             {
                 throw new BussinessException("Menu not created yet");
-            }            
+            }
+
+            //checker if choosen lunchtime is from this week is needed
             else
             {
                 var projectId = Guid.Parse(connections.ProjectId);
@@ -71,13 +78,19 @@ namespace LunchOrderServer.Actions.Service
                 var client = new CodeMashClient(apiKey, projectId);
                 var service = new CodeMashRepository<Menu>(client);
 
-                menu.lunchtime = lunchtime;
-                menu.lunchtime = menu.lunchtime.AddHours(2);
-                List<Employee> employees = HRService.IsWorkingAtLunchDay(menu.division, lunchtime);
+                lunchtime= lunchtime.AddHours(2);
+                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+                TimeSpan duration = lunchtime.Subtract(epoch);
+                var diff = duration.TotalMilliseconds;
+
+
+                menu.LunchTimeDate = Convert.ToSingle(diff);
+              //  menu.lunchtime = menu.lunchtime.AddHours(2);
+                List<Employee> employees = HRService.IsWorkingAtLunchDay(menu.DivisionThisMenuBelong, lunchtime);
               
                 List<string> employeesId = new List<string>();
                 employees.ForEach(x => employeesId.Add(x.Id));
-                menu.employees = employeesId;
+                menu.EmployeesInMenu = employeesId;
 
                 service.ReplaceOne(
                     x => x.Id == menu.Id, menu,
@@ -89,7 +102,7 @@ namespace LunchOrderServer.Actions.Service
 
         public void AddSupplierToMenu(Menu menu, Supplier supplier )
         {
-            if (!DoMenuExist(menu.division))
+            if (!DoMenuExist(menu.DivisionThisMenuBelong))
             {
                 throw new BussinessException("This is previous week menu");
             }
@@ -97,7 +110,7 @@ namespace LunchOrderServer.Actions.Service
             {
                 throw new BussinessException("Supplier is null");
             }
-            menu.supplier = supplier.Id;
+            menu.ThismenuSupplier = supplier.Id;
 
             var projectId = Guid.Parse(connections.ProjectId);
             var apiKey = connections.ApiKey;
@@ -115,11 +128,11 @@ namespace LunchOrderServer.Actions.Service
 
         public void AddFoodToMenu(Menu menu, List<string> food)
         {                     
-            if (TimeHasPassed(menu.lunchtime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            if (menu.supplier == null)
+            //if (TimeHasPassed(menu.lunchtime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+            if (menu.ThismenuSupplier == null)
             {
                 throw new BussinessException("supplier not yet identified");
             }
@@ -128,15 +141,15 @@ namespace LunchOrderServer.Actions.Service
             var client = new CodeMashClient(apiKey, projectId);
             var serviceFood = new CodeMashRepository<Supplier>(client);
             var serviceMenu = new CodeMashRepository<Menu>(client);
-            var supplier = serviceFood.FindOneById(menu.supplier).Result;
+            var supplier = serviceFood.FindOneById(menu.ThismenuSupplier).Result;
 
-            bool hasAll = food.Intersect(supplier.foodlist).Count() == food.Count();
+            bool hasAll = food.Intersect(supplier.Foodlist).Count() == food.Count();
             if (!hasAll)
             {
                 throw new BussinessException("the food which does not belong to chosen supplier was added");
             }
 
-            menu.foodlist = food;
+            menu.Menufoodlist = food;
             serviceMenu.ReplaceOne(
                 x => x.Id == menu.Id, menu,
                 new DatabaseReplaceOneOptions()
@@ -144,24 +157,24 @@ namespace LunchOrderServer.Actions.Service
         }
         public void AddGuestToMenu(Menu menu, List<Guest> guests)
         {
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
             if (guests.Count== 0)
             {
                 throw new BussinessException("no guests were chosen");
             }
 
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            guests.RemoveAll(x => menu.Guests.Any(y => y.Id == x.Id));
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+            //guests.RemoveAll(x => menu.Guests.Any(y => y.Id == x.Id));
             
-            menu.Guests = menu.Guests
-            .Concat(guests)
-            .ToList();
+            //menu.Guests = menu.Guests
+            //.Concat(guests)
+            //.ToList();
             //
             //update database
             //
@@ -169,59 +182,59 @@ namespace LunchOrderServer.Actions.Service
         }
         public void RemoveGuest(Menu menu, List<Guest> guests)
         {
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            if (guests.Count == 0)
-            {
-                throw new BussinessException("no guests were chosen");
-            }
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            menu.Guests.RemoveAll(x => guests.Any(y => y.Id == x.Id));
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+            //if (guests.Count == 0)
+            //{
+            //    throw new BussinessException("no guests were chosen");
+            //}
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+       //     menu.Guests.RemoveAll(x => guests.Any(y => y.Id == x.Id));
             //
             //update database
             //
         }
         public void AddEmployee(Menu menu, List<Employee> employees)
         {
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            if (employees.Count == 0)
-            {
-                throw new BussinessException("no guests were chosen");
-            }
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            employees.RemoveAll(x => menu.Employees.Any(y => y.Name == x.Name));
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+            //if (employees.Count == 0)
+            //{
+            //    throw new BussinessException("no guests were chosen");
+            //}
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+           // employees.RemoveAll(x => menu.EmployeesInMenu.Any(y => y.Name == x.Name));
 
-            menu.Employees = menu.Employees
-           .Concat(employees)
-           .ToList();
+           // menu.EmployeesInMenu = menu.EmployeesInMenu
+           //.Concat(employees)
+           //.ToList();
         }
 
         public void RemoveEmployee(Menu menu, List<Employee> employees)
         {
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            if (employees.Count == 0)
-            {
-                throw new BussinessException("no guests were chosen");
-            }
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu");
-            }
-            menu.Employees.RemoveAll(x => employees.Any(y => y.Name == x.Name));
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+            //if (employees.Count == 0)
+            //{
+            //    throw new BussinessException("no guests were chosen");
+            //}
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu");
+            //}
+           // menu.Employees.RemoveAll(x => employees.Any(y => y.Name == x.Name));
         }
 
         //------------------------------------------------------
@@ -229,26 +242,26 @@ namespace LunchOrderServer.Actions.Service
 
         public Order CreateOrder(Menu menu)//Maybe we can get division from menu, becouse menu has division attribute.
         {
-            if (TimeHasPassed(menu.LunchTime))
-            {
-                throw new BussinessException("This is previous week menu, set new menu");
-            }
-            if (menu.Suplier==null)
+            //if (TimeHasPassed(menu.LunchTime))
+            //{
+            //    throw new BussinessException("This is previous week menu, set new menu");
+            //}
+            if (menu.ThismenuSupplier==null)
             {
                 throw new BussinessException("supplier not yet identified");
             }
-            if (menu.FoodList.Count == 0)
+            if (menu.Menufoodlist.Count == 0)
             {
                 throw new BussinessException("Food List is empty, please set food list");
             }
-            if (menu.Employees.Count == 0)
+            if (menu.EmployeesInMenu.Count == 0)
             {
                 throw new BussinessException("Employees list is empty");
             }
 
             Order order = new Order(menu);
            // menu.Division.Orders.Add()
-            menu.Division.Orders.Add(order);
+          //  menu.Division.Orders.Add(order);
             //
             //Create order in database
             //
@@ -430,11 +443,18 @@ namespace LunchOrderServer.Actions.Service
             var client = new CodeMashClient(apiKey, projectId);
             var service = new CodeMashRepository<Menu>(client);
 
-            var menuList= service.Find().Result.ToList();
-            var menuByDivision = menuList.FindAll(x => x.division == divisionId).ToList();
-            var LastMenu = menuByDivision[menuList.Count-1];
+            var menuList = service.Find().Result.ToList();
+            //var menuByDivision = service.Find(x=>x.DivisionThisMenuBelong== divisionId).Result.ToList();
+            var menuByDivision = menuList.FindAll(x => x.DivisionThisMenuBelong == divisionId).ToList();
 
-            if (LastMenu.lunchtime>DateTime.Now)
+
+            //Exceptiono is needed
+            var LastMenu = menuByDivision[menuByDivision.Count-1];
+
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
+            DateTime date = epoch.AddMilliseconds(LastMenu.LunchTimeDate);
+
+            if (date > DateTime.Now)
             {
                 return true;
             }

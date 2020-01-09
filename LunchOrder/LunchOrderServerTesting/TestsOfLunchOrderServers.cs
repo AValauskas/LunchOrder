@@ -53,7 +53,7 @@ namespace LunchOrderServerTesting
             DateTime closestFriday = DateTime.Now.StartOfWeek(DayOfWeek.Friday);
             var employeeList = new List<Employee>();
             employeeList.Add(new Employee(employeeName, division));
-            menu = new Menu(closestFriday, employeeList,division);
+            menu = new Menu();
             var lunchTime = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), day);
             lunchdate = DateTime.Now.StartOfWeek(lunchTime);
 
@@ -76,7 +76,7 @@ namespace LunchOrderServerTesting
             DateTime closestFriday = DateTime.Now.StartOfWeek(DayOfWeek.Friday);
             var employeeList = new List<Employee>();
             employeeList.Add(new Employee(employeeName, division));
-            var menu = new Menu(closestFriday, employeeList,division);          
+            var menu = new Menu();          
             
             ILunchService lunchService = Substitute.For<LunchService>();
             lunchService.IsTodayMonday().Returns(true);
@@ -86,7 +86,6 @@ namespace LunchOrderServerTesting
             lunchService.HRService = mockHrService;
 
 
-            IDataBaseService databaseService = Substitute.For<DataBaseService>();
         //    lunchService.Database = databaseService;
 
           //  var GainMenu = lunchService.CreateNewMenu(division);
@@ -107,7 +106,7 @@ namespace LunchOrderServerTesting
             DateTime closestFriday = DateTime.Now.StartOfWeek(DayOfWeek.Friday);
             var employeeList = new List<Employee>();
             employeeList.Add(new Employee(employeeName, division));
-            var menu = new Menu(closestFriday, employeeList, division);
+            var menu = new Menu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
             lunchService.IsTodayMonday().Returns(false);
@@ -186,7 +185,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(true);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(true);
             var exception = Assert.Throws<BussinessException>(() => lunchService.AddSupplierToMenu( menu, TestCases.GetExpressSupplier()));
 
             var message = "This is previous week menu";
@@ -200,7 +199,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
             //var arenalist = TestCases.ArenaList;
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
             var exception = Assert.Throws<BussinessException>(() => lunchService.AddSupplierToMenu(menu, null));
 
             var message = "Supplier is null";
@@ -214,7 +213,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Record.Exception(() => lunchService.AddSupplierToMenu(menu, TestCases.GetExpressSupplier()));
             Assert.Null(exception);
@@ -227,7 +226,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+         //   lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
           //  var exception = Assert.Throws<BussinessException>(() => lunchService.AddFoodToMenu(menu, TestCases.expressList));
 
             var message = "supplier not yet identified";
@@ -241,7 +240,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
            // var exception = Assert.Throws<BussinessException>(() => lunchService.AddFoodToMenu(menu, TestCases.ArenaList));
 
             var message = "the food which does not belong to chosen supplier was added";
@@ -254,7 +253,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
            // var exception = Record.Exception(() => lunchService.AddFoodToMenu(menu, TestCases.expressList));
          //   Assert.Null(exception);
@@ -267,7 +266,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Assert.Throws<BussinessException>(() => lunchService.AddGuestToMenu(menu, new List<Guest>()));
 
@@ -282,7 +281,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Record.Exception(() => lunchService.AddGuestToMenu(menu, TestCases.guestList));
             Assert.Null(exception);
@@ -295,7 +294,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Record.Exception(() => lunchService.RemoveGuest(menu, TestCases.guestList3));
             Assert.Null(exception);
@@ -308,7 +307,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(true);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(true);
 
             var exception = Assert.Throws<BussinessException>(() => lunchService.CreateOrder(menu));
 
@@ -322,7 +321,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.CreateEmptyMenu();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Assert.Throws<BussinessException>(() => lunchService.CreateOrder(menu));
 
@@ -334,10 +333,10 @@ namespace LunchOrderServerTesting
         public void Create_Order_Supplier_Failed_Food_List_Is_Empty()
         {
             var menu = TestCases.MenuwithFoodAndSupplier();
-            menu.FoodList = new List<Food>();
+       //     menu.FoodList = new List<Food>();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+          //  lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Assert.Throws<BussinessException>(() => lunchService.CreateOrder(menu));
 
@@ -350,10 +349,10 @@ namespace LunchOrderServerTesting
         public void Create_Order_Supplier_Failed_Employee_List_Is_empty()
         {
             var menu = TestCases.MenuwithFoodAndSupplier();
-            menu.Employees = new List<Employee>();
+            //menu.Employees = new List<Employee>();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Assert.Throws<BussinessException>(() => lunchService.CreateOrder(menu));
 
@@ -368,7 +367,7 @@ namespace LunchOrderServerTesting
             var menu = TestCases.MenuwithFoodAndSupplier();
 
             ILunchService lunchService = Substitute.For<LunchService>();
-            lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
+           // lunchService.TimeHasPassed(menu.LunchTime).Returns(false);
 
             var exception = Record.Exception(() => lunchService.CreateOrder(menu));
             Assert.Null(exception);

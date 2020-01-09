@@ -68,7 +68,7 @@ namespace LunchOrderServerTesting
             var service = new CodeMashRepository<Menu>(client);
 
             var menuList = service.Find().Result.ToList();
-            var menuByDivision = menuList.FindAll(x => x.division == TestCases.MyDivisionID).ToList();
+            var menuByDivision = menuList.FindAll(x => x.DivisionThisMenuBelong == TestCases.MyDivisionID).ToList();
             var lastMenu = menuByDivision[menuList.Count - 1];
 
             ILunchService lunchService = Substitute.For<LunchService>();
@@ -105,7 +105,7 @@ namespace LunchOrderServerTesting
 
 
             var menuList = serviceMenu.Find().Result.ToList();
-            var menuByDivision = menuList.FindAll(x => x.division == TestCases.MyDivisionID).ToList();
+            var menuByDivision = menuList.FindAll(x => x.DivisionThisMenuBelong == TestCases.MyDivisionID).ToList();
             var lastMenu = menuByDivision[menuList.Count - 1];
 
             var supplierList = serviceSupplier.Find().Result.ToList();
@@ -138,22 +138,22 @@ namespace LunchOrderServerTesting
             var serviceFood = new CodeMashRepository<Food>(client);
 
             var menuList = serviceMenu.Find().Result.ToList();
-            var menuByDivision = menuList.FindAll(x => x.division == TestCases.MyDivisionID).ToList();
+            var menuByDivision = menuList.FindAll(x => x.DivisionThisMenuBelong == TestCases.MyDivisionID).ToList();
             var lastMenu = menuByDivision[menuList.Count - 1];
 
-            var supplier = serviceSupplier.FindOneById(lastMenu.supplier).Result;
+            var supplier = serviceSupplier.FindOneById(lastMenu.ThismenuSupplier).Result;
 
             var foodList = serviceFood.Find().Result.ToList();
-            var foodToAddList = foodList.FindAll(x => supplier.foodlist.Contains(x.Id)).ToList();
+            var foodToAddList = foodList.FindAll(x => supplier.Foodlist.Contains(x.Id)).ToList();
 
-            lunchService.AddFoodToMenu(lastMenu, supplier.foodlist);
+            lunchService.AddFoodToMenu(lastMenu, supplier.Foodlist);
         }
 
 
 
         [Fact]
-        public void Test_Menu_Find()
-        {        
+        public async void Test_Menu_Find()
+        {
             var projectId = Guid.Parse(settings.ProjectId);
             var apiKey = settings.ApiKey;
             var client = new CodeMashClient(apiKey, projectId);
@@ -165,11 +165,30 @@ namespace LunchOrderServerTesting
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0);
             DateTime date = epoch.AddMilliseconds(timespan);
 
+            var nextFriday = TestCases.Friday;
+            TimeSpan duration = nextFriday.Subtract(epoch);
+            var diff = duration.TotalMilliseconds;
 
-            
+            var menu = new Menu(Convert.ToSingle(diff), "5e144e04e39c590001d31fcd");
+            await serviceMenu.InsertOneAsync(menu);
+
         }
 
 
+        [Fact]
+        public void Test_Person()
+        {
+            var projectId = Guid.Parse(settings.ProjectId);
+            var apiKey = settings.ApiKey;
+            var client = new CodeMashClient(apiKey, projectId);
+            var serviceMenu = new CodeMashRepository<Person>(client);
+
+            var person = new Person { Name = "John" };
+
+            var pp = serviceMenu.Find(x => x.Name == "John");
+
+            serviceMenu.InsertOne(person);
+        }
 
 
 

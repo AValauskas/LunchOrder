@@ -23,7 +23,7 @@
           "lib/netstandard1.5/Castle.Core.dll": {}
         }
       },
-      "CodeMash.Core/2.0.128": {
+      "CodeMash.Core/2.0.131": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Configuration": "2.2.0",
@@ -3130,7 +3130,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
-          "CodeMash.Core": "2.0.128"
+          "CodeMash.Core": "2.0.131"
         },
         "compile": {
           "bin/placeholder/LunchOrderServer.dll": {}
@@ -3170,14 +3170,14 @@
         "readme.txt"
       ]
     },
-    "CodeMash.Core/2.0.128": {
-      "sha512": "iW/115hBsREHG7FPHsNeBMVBPbxZ7X3m2MQotSfxUU0MB+OKJUngdOVrhSJd/yDpiuW4WIMQR8uXprqLqJt+wQ==",
+    "CodeMash.Core/2.0.131": {
+      "sha512": "LYwL+cpYjJ2WpF5cQDprUt6wAUr27xACngVBMiU2YslbxitGhz4SJCTURZxLiGZSRPPHc/dFCWM24HeVaqQP4w==",
       "type": "package",
-      "path": "codemash.core/2.0.128",
+      "path": "codemash.core/2.0.131",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "codemash.core.2.0.128.nupkg.sha512",
+        "codemash.core.2.0.131.nupkg.sha512",
         "codemash.core.nuspec",
         "lib/netstandard2.0/CodeMash.Client.dll",
         "lib/netstandard2.0/CodeMash.Code.dll",
@@ -9595,7 +9595,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
-      "CodeMash.Core >= 2.0.128",
+      "CodeMash.Core >= 2.0.131",
       "LunchOrderServer >= 1.0.0",
       "Microsoft.Extensions.Configuration.UserSecrets >= 3.1.0",
       "Microsoft.NET.Test.Sdk >= 16.2.0",
@@ -9654,7 +9654,7 @@
         "dependencies": {
           "CodeMash.Core": {
             "target": "Package",
-            "version": "[2.0.128, )"
+            "version": "[2.0.131, )"
           },
           "Microsoft.Extensions.Configuration.UserSecrets": {
             "target": "Package",

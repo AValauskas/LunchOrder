@@ -28,11 +28,11 @@ namespace LunchOrderServer.Models.Orders
 
         public Order(Menu menu)
         {
-            this.FoodList = menu.FoodList;
+          //  this.FoodList = menu.foodlist;
             this.EmployersOrders = new List<PersonalOrder>();
-            this.Employees =menu.Employees;
-            this.Guests = menu.Guests;
-            this.LunchDay = menu.LunchTime;
+           // this.Employees =menu.Employees;
+          //  this.Guests = menu.Guests;
+         //   this.LunchDay = menu.LunchTime;
             this.TotalPrice = 0;
             this.IsOpen = true;
         }

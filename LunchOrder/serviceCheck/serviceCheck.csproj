@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeMash.Core" Version="2.0.128" />
+    <PackageReference Include="CodeMash.Core" Version="2.0.131" />
   </ItemGroup>
 
 </Project>

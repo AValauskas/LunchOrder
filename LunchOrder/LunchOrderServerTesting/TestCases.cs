@@ -28,8 +28,8 @@ namespace LunchOrderServerTesting
           
     var employeeList = new List<Employee> { EmployeeFromLT1, EmployeeFromLT2, EmployeeFromLT3Guest };
             //mployeeList.Add(EmployeeFromLT1);
-            Menu menu = new Menu(Friday, employeeList, DivisionLTU);
-            menu.LunchTime = Friday;
+            Menu menu = new Menu();
+            //menu.LunchTime = Friday;
           //  menu.division = "5e0db73559c49d0001b6160f";
             menu.Id = "5e0df4d259c49d0001c76255";
             return menu;
@@ -40,14 +40,14 @@ namespace LunchOrderServerTesting
 
             var employeeList = new List<Employee> { EmployeeFromLT1, EmployeeFromLT2, EmployeeFromLT3Guest };
             //mployeeList.Add(EmployeeFromLT1);
-            Menu menu = new Menu(Friday, employeeList, DivisionLTU);
+            Menu menu = new Menu();
          //   menu.division = "5e0db73559c49d0001b6160f";
             menu.Id = "5e0df4d259c49d0001c76255";
         //    menu.supplier = "5e0db7ee59c49d0001b61652";
-            menu.LunchTime = Friday;
-            menu.Suplier = GetExpressSupplier();
-            menu.FoodList = expressList;
-            menu.Guests = guestList2;
+           // menu.LunchTime = Friday;
+          // // menu.supp = GetExpressSupplier();
+           // menu.FoodList = expressList;
+          //  menu.Guests = guestList2;
             return menu;
         }
 
@@ -139,13 +139,13 @@ namespace LunchOrderServerTesting
             new Guest("Jonas"),
             new Guest("Jurgis"),};
 
-        public static Supplier GetArrenaSupplier() { Supplier ArennaSupplier = new Supplier("Arenna", ArenaList);return ArennaSupplier;
+        public static Supplier GetArrenaSupplier() { return null;
     }
         public static Supplier GetExpressSupplier()
         {
-            Supplier ExpressSupplier = new Supplier("Express", expressList);
-            ExpressSupplier.Id = "5e0db7ee59c49d0001b61652";
-            return ExpressSupplier;
+            //Supplier ExpressSupplier = new Supplier("Express", expressList);
+            //ExpressSupplier.Id = "5e0db7ee59c49d0001b61652";
+            return null;
         }
 
 
